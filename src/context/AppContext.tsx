@@ -6,7 +6,6 @@ interface AppContextType {
   currentUser: User | null;
   users: User[];
   setCurrentUser: (user: User | null) => void;
-  switchUserRole: (role: UserRole) => void;
   loginUser: (email: string) => boolean;
   registerUser: (userData: { full_name: string; email: string; phone: string; referral_code_used?: string }) => User;
   logout: () => void;
@@ -228,13 +227,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [questions]);
 
   // Auth Functions
-  const switchUserRole = (role: UserRole) => {
-    const target = users.find((u) => u.role === role);
-    if (target) {
-      setCurrentUser(target);
-    }
-  };
-
   const loginUser = (email: string): boolean => {
     const user = users.find((u) => u.email.toLowerCase() === email.trim().toLowerCase());
     if (user) {
@@ -631,7 +623,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         currentUser,
         users,
         setCurrentUser,
-        switchUserRole,
         loginUser,
         registerUser,
         logout,
