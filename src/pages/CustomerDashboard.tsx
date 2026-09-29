@@ -55,8 +55,8 @@ export const CustomerDashboard: React.FC = () => {
     : [];
 
   // Primary vehicle plate for loyalty card display
-  const primaryPlate = userVehicles[0]?.plate_number || 'DB 44 ZN GP';
-  const loyaltyData = getLoyaltyCardForPlate(primaryPlate);
+  const primaryPlate = userVehicles[0]?.plate_number;
+  const loyaltyData = primaryPlate ? getLoyaltyCardForPlate(primaryPlate) : null;
 
   const handleCopyReferral = () => {
     if (currentUser?.referral_code) {
@@ -72,9 +72,9 @@ export const CustomerDashboard: React.FC = () => {
 
     addVehicle({
       user_id: currentUser.id,
-      make: newMake.trim() || 'Vehicle',
-      model: newModel.trim() || 'Model',
-      color: newColor.trim() || 'Color',
+      make: newMake.trim(),
+      model: newModel.trim(),
+      color: newColor.trim(),
       plate_number: newPlate.toUpperCase().trim(),
       vehicle_type: newType,
     });
@@ -101,7 +101,7 @@ export const CustomerDashboard: React.FC = () => {
             WELCOME BACK, {currentUser?.full_name?.toUpperCase() || 'DRIVER'}
           </h1>
           <p className="text-xs sm:text-sm text-neutral-400">
-            {currentUser?.phone || '082 555 1234'} &bull; {currentUser?.email || 'driver@waldrift.co.za'} &bull; Member since 2026
+            {currentUser?.phone || 'Phone not provided'} &bull; {currentUser?.email || 'Email not provided'}
           </p>
         </div>
 
@@ -112,7 +112,7 @@ export const CustomerDashboard: React.FC = () => {
               Your Referral Code
             </span>
             <span className="font-mono font-700 text-amber-400 text-sm tracking-wider">
-              {currentUser?.referral_code || 'SIPHO-WASH'}
+              {currentUser?.referral_code || 'Not available'}
             </span>
           </div>
 
@@ -154,10 +154,20 @@ export const CustomerDashboard: React.FC = () => {
             </button>
           </div>
 
-          <LoyaltyCardVisual
-            cardData={loyaltyData}
-            onRedeem={() => redeemFreeWash(primaryPlate)}
-          />
+          {loyaltyData ? (
+            <LoyaltyCardVisual
+              cardData={loyaltyData}
+              onRedeem={() => primaryPlate && redeemFreeWash(primaryPlate)}
+            />
+          ) : (
+            <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-8 text-center space-y-3">
+              <Sparkles className="w-10 h-10 text-neutral-600 mx-auto" />
+              <h3 className="font-oswald font-700 text-xl uppercase text-white">No Loyalty Activity Yet</h3>
+              <p className="text-xs text-neutral-400 max-w-md mx-auto">
+                Your loyalty card will appear after a vehicle is registered and a qualifying wash is recorded.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Right: Quick Action Shortcuts */}
@@ -278,7 +288,7 @@ export const CustomerDashboard: React.FC = () => {
                 {/* Vehicle photo preview */}
                 <div className="relative h-44 bg-neutral-950 overflow-hidden">
                   <img
-                    src={veh.photo_url || '/src/assets/images/sample_vehicle_checkin_1790713519472.jpg'}
+                    src={veh.photo_url || '/'}
                     alt={`${veh.make} ${veh.model}`}
                     className="w-full h-full object-cover"
                   />
