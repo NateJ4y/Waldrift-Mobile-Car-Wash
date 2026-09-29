@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { INITIAL_PACKAGES, INITIAL_ADDONS, INITIAL_MEMBERSHIPS } from '../data/seedData';
 import confetti from 'canvas-confetti';
+import { supabase } from '../lib/supabase';
 
 interface AppContextType {
   currentUser: User | null;
@@ -9,6 +10,9 @@ interface AppContextType {
   loginUser: (email: string) => boolean;
   registerUser: (userData: { full_name: string; email: string; phone: string; referral_code_used?: string }) => User;
   logout: () => void;
+  signIn: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  signUp: (userData: { full_name: string; email: string; phone: string; password: string; referral_code_used?: string }) => Promise<{ success: boolean; error?: string; needsEmailConfirmation?: boolean }>;
+  signOut: () => Promise<void>;
 
   // Navigation
   currentPage: string;
@@ -113,6 +117,68 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (saved) return JSON.parse(saved);
     return null;
   });
+
+  // Supabase session/profile hydration
+  useEffect(() => {
+    let active = true;
+
+    const hydrateUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!active) return;
+      if (!session?.user) {
+        setCurrentUser(null);
+        return;
+      }
+      const { data: profile } = await supabase.from('profiles').select('*').eq('id', session.user.id).maybeSingle();
+      if (!active) return;
+      const metadata = session.user.user_metadata || {};
+      setCurrentUser({
+        id: session.user.id,
+        email: session.user.email || '',
+        full_name: profile?.full_name || metadata.full_name || '',
+        phone: profile?.phone || metadata.phone || '',
+        role: profile?.role || 'customer',
+        created_at: profile?.created_at || session.user.created_at,
+        referral_code: profile?.referral_code,
+        referred_by: profile?.referred_by,
+        discount_balance: Number(profile?.discount_balance || 0),
+      } as User);
+    };
+
+    hydrateUser();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+      void hydrateUser();
+    });
+    return () => { active = false; subscription.unsubscribe(); };
+  }, []);
+
+  const signIn = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    if (error) return { success: false, error: error.message };
+    return { success: true };
+  };
+
+  const signUp = async (userData: { full_name: string; email: string; phone: string; password: string; referral_code_used?: string }) => {
+    const { data, error } = await supabase.auth.signUp({
+      email: userData.email.trim(),
+      password: userData.password,
+      options: {
+        data: {
+          full_name: userData.full_name.trim(),
+          phone: userData.phone.trim(),
+          referral_code_used: userData.referral_code_used?.trim() || null,
+        },
+      },
+    });
+    if (error) return { success: false, error: error.message };
+    return { success: true, needsEmailConfirmation: !data.session };
+  };
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    setCurrentUser(null);
+    setCurrentPage('landing');
+  };
 
   // Navigation
   const [currentPage, setCurrentPageState] = useState<string>('landing');
@@ -625,6 +691,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         loginUser,
         registerUser,
         logout,
+        signIn,
+        signUp,
+        signOut,
         currentPage,
         setCurrentPage,
         pageParams,
