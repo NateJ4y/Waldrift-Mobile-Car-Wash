@@ -19,7 +19,9 @@ export const LoginPage: React.FC = () => {
     const result = await signIn(email, password);
     setLoading(false);
     if (result.success) {
-      setCurrentPage('customer-dashboard');
+      if (result.role === 'admin') setCurrentPage('admin-dashboard');
+      else if (result.role === 'staff') setCurrentPage('staff-checkin');
+      else setCurrentPage('customer-dashboard');
     } else {
       setError(result.error || 'Unable to sign in. Please check your details and try again.');
     }
