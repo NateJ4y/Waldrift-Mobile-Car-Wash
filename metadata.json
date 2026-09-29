@@ -1,0 +1,6 @@
+{
+  "name": "Waldrift Car Wash",
+  "description": "Official Waldrift Car Wash app for Vereeniging. Features online booking, license plate vehicle history tracking, staff photo check-in, digital loyalty stamps, referral rewards, and PayPal payments.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
