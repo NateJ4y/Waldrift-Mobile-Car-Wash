@@ -21,8 +21,7 @@ import {
 export const Navbar: React.FC = () => {
   const {
     currentUser,
-    switchUserRole,
-    setCurrentPage,
+      setCurrentPage,
     currentPage,
     logout,
     messages,
@@ -161,94 +160,7 @@ export const Navbar: React.FC = () => {
 
           {/* Zone 3: Primary Action & Quick Role Switcher */}
           <div className="flex items-center gap-3">
-            {/* Quick Role Switcher dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setRoleMenuOpen(!roleMenuOpen)}
-                className="flex items-center gap-2 bg-neutral-900 hover:bg-neutral-800 border border-neutral-700/80 px-3 py-1.5 rounded-lg text-xs font-600 text-neutral-200 transition-all cursor-pointer"
-              >
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span className="hidden sm:inline font-mono uppercase text-[11px] text-neutral-400">
-                  Role:
-                </span>
-                <span className="capitalize text-white font-700">
-                  {currentUser?.role || 'Guest'}
-                </span>
-                <ChevronDown className="w-3.5 h-3.5 text-neutral-400" />
-              </button>
-
-              {roleMenuOpen && (
-                <div className="absolute right-0 mt-2 w-64 bg-neutral-900 border border-neutral-700 rounded-xl shadow-2xl py-2 z-50">
-                  <div className="px-3 py-1.5 border-b border-neutral-800 text-[11px] text-neutral-400 font-600 uppercase tracking-wider">
-                    Switch Test Account / Role
-                  </div>
-                  <button
-                    onClick={() => {
-                      switchUserRole('customer');
-                      setRoleMenuOpen(false);
-                      navigateTo('customer-dashboard');
-                    }}
-                    className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-neutral-800 cursor-pointer ${
-                      currentUser?.role === 'customer' ? 'text-red-400 font-700 bg-red-950/20' : 'text-neutral-200'
-                    }`}
-                  >
-                    <div>
-                      <div className="font-600">Sipho Mthembu</div>
-                      <div className="text-[11px] text-neutral-500">Customer &bull; 2 Cars &bull; 3 Stamps</div>
-                    </div>
-                    {currentUser?.role === 'customer' && <span className="text-red-500">&bull;</span>}
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      switchUserRole('staff');
-                      setRoleMenuOpen(false);
-                      navigateTo('staff-checkin');
-                    }}
-                    className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-neutral-800 cursor-pointer ${
-                      currentUser?.role === 'staff' ? 'text-red-400 font-700 bg-red-950/20' : 'text-neutral-200'
-                    }`}
-                  >
-                    <div>
-                      <div className="font-600">Thabo Ndlovu</div>
-                      <div className="text-[11px] text-neutral-500">Staff &bull; Camera Check-In &bull; Wash Bays</div>
-                    </div>
-                    {currentUser?.role === 'staff' && <span className="text-red-500">&bull;</span>}
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      switchUserRole('admin');
-                      setRoleMenuOpen(false);
-                      navigateTo('admin-dashboard');
-                    }}
-                    className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-neutral-800 cursor-pointer ${
-                      currentUser?.role === 'admin' ? 'text-red-400 font-700 bg-red-950/20' : 'text-neutral-200'
-                    }`}
-                  >
-                    <div>
-                      <div className="font-600">Lerato Khumalo</div>
-                      <div className="text-[11px] text-neutral-500">Admin &bull; Full Control &bull; Revenue &amp; Menu</div>
-                    </div>
-                    {currentUser?.role === 'admin' && <span className="text-red-500">&bull;</span>}
-                  </button>
-
-                  <div className="border-t border-neutral-800 mt-1 pt-1">
-                    <button
-                      onClick={() => {
-                        setRoleMenuOpen(false);
-                        logout();
-                      }}
-                      className="w-full text-left px-3 py-1.5 text-xs text-rose-400 hover:bg-neutral-800 flex items-center gap-1.5 cursor-pointer"
-                    >
-                      <LogOut className="w-3.5 h-3.5" /> Sign Out
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Dashboard / User Button */}
+            {/* Account / Dashboard */}
             {currentUser ? (
               <button
                 onClick={() =>
