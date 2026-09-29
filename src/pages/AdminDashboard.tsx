@@ -71,6 +71,14 @@ export const AdminDashboard: React.FC = () => {
             Manage Prices &amp; Menu
           </Button>
           <Button
+            variant="outline"
+            onClick={() => setCurrentPage('staff-management')}
+            className="text-xs flex items-center gap-1.5"
+          >
+            <Users className="w-3.5 h-3.5" />
+            Staff &amp; Access
+          </Button>
+          <Button
             variant="primary"
             onClick={() => setCurrentPage('staff-checkin')}
             className="text-xs flex items-center gap-1.5"
