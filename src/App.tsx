@@ -20,6 +20,7 @@ import { AdminDashboard } from './pages/AdminDashboard';
 import { ServiceManagementPage } from './pages/ServiceManagementPage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
+import { StaffManagementPage } from './pages/StaffManagementPage';
 
 const AppContent: React.FC = () => {
   const { currentPage, payPalModalState, closePayPal, currentUser } = useApp();
@@ -56,6 +57,8 @@ const AppContent: React.FC = () => {
         return <AdminDashboard />;
       case 'service-management':
         return <ServiceManagementPage />;
+      case 'staff-management':
+        return <StaffManagementPage />;
       case 'login':
         return <LoginPage />;
       case 'register':
