@@ -30,16 +30,16 @@ export const StaffCheckInPage: React.FC = () => {
   } = useApp();
 
   // Intake State
-  const [plateInput, setPlateInput] = useState<string>('DB 44 ZN GP');
+  const [plateInput, setPlateInput] = useState<string>('');
   const [vehicleType, setVehicleType] = useState<VehicleType>('sedan');
-  const [vehicleSummary, setVehicleSummary] = useState<string>('VW Polo TSI (White)');
-  const [customerName, setCustomerName] = useState<string>('Sipho Mthembu');
-  const [customerPhone, setCustomerPhone] = useState<string>('082 555 1234');
+  const [vehicleSummary, setVehicleSummary] = useState<string>('');
+  const [customerName, setCustomerName] = useState<string>('');
+  const [customerPhone, setCustomerPhone] = useState<string>('');
   const [selectedPackageId, setSelectedPackageId] = useState<string>('pkg-full-wash');
   const [selectedAddonIds, setSelectedAddonIds] = useState<string[]>(['addon-engine-wash']);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash_on_arrival');
-  const [staffNotes, setStaffNotes] = useState<string>('Intake inspection complete. Clean rims and tyres.');
-  const [photoUrl, setPhotoUrl] = useState<string>('/src/assets/images/sample_vehicle_checkin_1790713519472.jpg');
+  const [staffNotes, setStaffNotes] = useState<string>('');
+  const [photoUrl, setPhotoUrl] = useState<string>('');
   const [redeemFreeWash, setRedeemFreeWash] = useState<boolean>(false);
 
   // Modals & Confirmation
@@ -76,10 +76,10 @@ export const StaffCheckInPage: React.FC = () => {
   };
 
   // Pricing calculations
-  const selectedPkg = packages.find((p) => p.id === selectedPackageId) || packages[2];
-  let pkgPrice = selectedPkg.price_sedan;
-  if (vehicleType === 'suv') pkgPrice = selectedPkg.price_suv;
-  if (vehicleType === 'bakkie') pkgPrice = selectedPkg.price_bakkie;
+  const selectedPkg = packages.find((p) => p.id === selectedPackageId) || packages[0];
+  let pkgPrice = selectedPkg?.price_sedan || 0;
+  if (vehicleType === 'suv') pkgPrice = selectedPkg?.price_suv || 0;
+  if (vehicleType === 'bakkie') pkgPrice = selectedPkg?.price_bakkie || 0;
 
   const addonsTotal = selectedAddonIds.reduce((sum, id) => {
     const a = addons.find((item) => item.id === id);
