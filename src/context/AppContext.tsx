@@ -1,31 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import {
-  User,
-  Vehicle,
-  ServicePackage,
-  AddonService,
-  MembershipPlan,
-  AppointmentBooking,
-  VehicleVisitRecord,
-  LoyaltyCardData,
-  ChatMessage,
-  Question,
-  UserRole,
-  PaymentMethod,
-  VehicleType,
-} from '../types';
-import {
-  INITIAL_USERS,
-  INITIAL_PACKAGES,
-  INITIAL_ADDONS,
-  INITIAL_MEMBERSHIPS,
-  INITIAL_VEHICLES,
-  INITIAL_VISIT_RECORDS,
-  INITIAL_LOYALTY_CARDS,
-  INITIAL_BOOKINGS,
-  INITIAL_CHAT_MESSAGES,
-  INITIAL_QUESTIONS,
-} from '../data/seedData';
+import { INITIAL_PACKAGES, INITIAL_ADDONS, INITIAL_MEMBERSHIPS } from '../data/seedData';
 import confetti from 'canvas-confetti';
 
 interface AppContextType {
@@ -116,29 +90,29 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const STORAGE_KEYS = {
-  USER: 'wcw_current_user_v1',
-  USERS: 'wcw_users_v1',
-  VEHICLES: 'wcw_vehicles_v1',
-  PACKAGES: 'wcw_packages_v1',
-  ADDONS: 'wcw_addons_v1',
-  BOOKINGS: 'wcw_bookings_v1',
-  VISITS: 'wcw_visits_v1',
-  LOYALTY: 'wcw_loyalty_v1',
-  MESSAGES: 'wcw_messages_v1',
-  QUESTIONS: 'wcw_questions_v1',
+  USER: 'wcw_current_user_v2',
+  USERS: 'wcw_users_v2',
+  VEHICLES: 'wcw_vehicles_v2',
+  PACKAGES: 'wcw_packages_v2',
+  ADDONS: 'wcw_addons_v2',
+  BOOKINGS: 'wcw_bookings_v2',
+  VISITS: 'wcw_visits_v2',
+  LOYALTY: 'wcw_loyalty_v2',
+  MESSAGES: 'wcw_messages_v2',
+  QUESTIONS: 'wcw_questions_v2',
 };
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Users
   const [users, setUsers] = useState<User[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.USERS);
-    return saved ? JSON.parse(saved) : INITIAL_USERS;
+    return saved ? JSON.parse(saved) : [];
   });
 
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.USER);
     if (saved) return JSON.parse(saved);
-    return INITIAL_USERS[0]; // default to Sipho (Customer)
+    return null;
   });
 
   // Navigation
@@ -154,7 +128,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Vehicles
   const [vehicles, setVehicles] = useState<Vehicle[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.VEHICLES);
-    return saved ? JSON.parse(saved) : INITIAL_VEHICLES;
+    return saved ? JSON.parse(saved) : [];
   });
 
   // Packages & Addons
@@ -173,31 +147,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Bookings
   const [bookings, setBookings] = useState<AppointmentBooking[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.BOOKINGS);
-    return saved ? JSON.parse(saved) : INITIAL_BOOKINGS;
+    return saved ? JSON.parse(saved) : [];
   });
 
   // Visit Records
   const [visitRecords, setVisitRecords] = useState<VehicleVisitRecord[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.VISITS);
-    return saved ? JSON.parse(saved) : INITIAL_VISIT_RECORDS;
+    return saved ? JSON.parse(saved) : [];
   });
 
   // Loyalty Cards
   const [loyaltyCards, setLoyaltyCards] = useState<Record<string, LoyaltyCardData>>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.LOYALTY);
-    return saved ? JSON.parse(saved) : INITIAL_LOYALTY_CARDS;
+    return saved ? JSON.parse(saved) : {};
   });
 
   // Messages
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.MESSAGES);
-    return saved ? JSON.parse(saved) : INITIAL_CHAT_MESSAGES;
+    return saved ? JSON.parse(saved) : [];
   });
 
   // Questions
   const [questions, setQuestions] = useState<Question[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.QUESTIONS);
-    return saved ? JSON.parse(saved) : INITIAL_QUESTIONS;
+    return saved ? JSON.parse(saved) : [];
   });
 
   // PayPal Modal
@@ -441,7 +415,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     redeem_free_wash?: boolean;
   }) => {
     const cleanPlate = data.plate_number.toUpperCase().trim();
-    const selectedPkg = packages.find((p) => p.id === data.service_package_id) || packages[2]; // default Full Wash
+    const selectedPkg = packages.find((p) => p.id === data.service_package_id);
+    if (!selectedPkg) {
+      throw new Error('No service package is configured. Add a service package before recording a wash.');
+    }
     const selectedAddons = addons.filter((a) => data.addon_ids.includes(a.id));
 
     // Calculate cost
@@ -515,7 +492,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       date: new Date().toISOString().split('T')[0],
       amount_paid: totalCost,
       payment_method: data.payment_method,
-      staff_name: currentUser?.full_name || 'Staff Member',
+      staff_name: currentUser?.full_name || undefined,
       notes: data.notes,
       loyalty_stamp_awarded: countsForLoyalty,
       is_free_reward_applied: isFreeRewardApplied,
@@ -590,22 +567,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     setMessages((prev) => [...prev, newMsg]);
 
-    // If customer sent it, trigger auto staff response simulation after 1.5s if not already responded
-    if (currentUser.role === 'customer') {
-      setTimeout(() => {
-        const staffReply: ChatMessage = {
-          id: `msg-${Date.now() + 1}`,
-          sender_id: 'usr-staff-1',
-          sender_name: 'Thabo Ndlovu (Staff)',
-          sender_role: 'staff',
-          receiver_id: currentUser.id,
-          text: `Thanks ${currentUser.full_name}! We received your message. Our bay team at 19 Andesite Ave is ready. Let us know if you need our 10km free mobile callout!`,
-          timestamp: new Date().toISOString(),
-          read: false,
-          plate_number: plateNumber,
-        };
-        setMessages((prev) => [...prev, staffReply]);
-      }, 1500);
+    // Only persist messages actually sent by authenticated users.
+    // No automated or fabricated staff replies are generated.
     }
   };
 
@@ -619,7 +582,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       id: `q-${Date.now()}`,
       customer_id: currentUser?.id || 'guest',
       customer_name: currentUser?.full_name || 'Guest Driver',
-      customer_email: currentUser?.email || 'guest@waldrift.co.za',
+      customer_email: currentUser?.email || '',
       subject: q.subject.trim(),
       category: q.category,
       message: q.message.trim(),
