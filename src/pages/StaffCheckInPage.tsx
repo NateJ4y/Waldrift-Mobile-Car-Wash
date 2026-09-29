@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
+import { uploadUserPhoto } from '../lib/photoStorage';
 import { VehicleType, PaymentMethod } from '../types';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -41,6 +42,8 @@ export const StaffCheckInPage: React.FC = () => {
   const [staffNotes, setStaffNotes] = useState<string>('');
   const [photoUrl, setPhotoUrl] = useState<string>('');
   const [redeemFreeWash, setRedeemFreeWash] = useState<boolean>(false);
+  const [photoUploading, setPhotoUploading] = useState(false);
+  const [photoError, setPhotoError] = useState('');
 
   // Modals & Confirmation
   const [isCameraOpen, setIsCameraOpen] = useState<boolean>(false);
@@ -68,10 +71,19 @@ export const StaffCheckInPage: React.FC = () => {
     );
   };
 
-  const handlePhotoCaptured = (capturedUrl: string, detectedPlate?: string) => {
-    setPhotoUrl(capturedUrl);
-    if (detectedPlate) {
-      setPlateInput(detectedPlate.toUpperCase().trim());
+  const handlePhotoCaptured = async (capturedUrl: string, detectedPlate?: string) => {
+    if (detectedPlate) setPlateInput(detectedPlate.toUpperCase().trim());
+    setPhotoError('');
+    setPhotoUploading(true);
+    try {
+      if (!currentUser?.id) throw new Error('Please sign in before uploading vehicle photos.');
+      const reference = await uploadUserPhoto(capturedUrl, currentUser.id);
+      setPhotoUrl(reference.public_url);
+      setIsCameraOpen(false);
+    } catch (error) {
+      setPhotoError(error instanceof Error ? error.message : 'Photo upload failed.');
+    } finally {
+      setPhotoUploading(false);
     }
   };
 
@@ -306,7 +318,9 @@ export const StaffCheckInPage: React.FC = () => {
                   Vehicle Intake Photo
                 </label>
                 <div className="relative aspect-video rounded-xl bg-neutral-950 border border-neutral-800 overflow-hidden flex items-center justify-center">
-                  {photoUrl ? (
+                  {photoUploading ? (
+                    <div className="text-center p-4 text-neutral-400 text-xs">Uploading photo securely...</div>
+                  ) : photoUrl ? (
                     <img
                       src={photoUrl}
                       alt="Vehicle photo"
@@ -333,8 +347,9 @@ export const StaffCheckInPage: React.FC = () => {
                   </div>
                 </div>
                 <span className="text-[11px] text-neutral-400 block">
-                  Takes snapshot using device camera or file upload for plate verification and paint condition.
+                  Takes snapshot using device camera or file upload, stores it in Supabase Storage, and records the photo reference against the signed-in user.
                 </span>
+                {photoError && <span className="text-[11px] text-red-400 block">{photoError}</span>}
               </div>
             </div>
           </div>
