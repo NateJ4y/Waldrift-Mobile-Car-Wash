@@ -478,7 +478,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       vehicle_summary: data.vehicle_summary,
       customer_name: data.customer_name,
       customer_phone: data.customer_phone,
-      photo_url: data.photo_url || '/src/assets/images/sample_vehicle_checkin_1790713519472.jpg',
+      photo_url: data.photo_url,
       service_package_name: selectedPkg.name,
       addon_names: selectedAddons.map((a) => a.name),
       date: new Date().toISOString().split('T')[0],
@@ -561,7 +561,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     // Only persist messages actually sent by authenticated users.
     // No automated or fabricated staff replies are generated.
-    }
   };
 
   const markMessagesAsRead = () => {
@@ -572,8 +571,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const askQuestion = (q: { subject: string; category: Question['category']; message: string }): Question => {
     const newQ: Question = {
       id: `q-${Date.now()}`,
-      customer_id: currentUser?.id || 'guest',
-      customer_name: currentUser?.full_name || 'Guest Driver',
+      customer_id: currentUser?.id || '',
+      customer_name: currentUser?.full_name || '',
       customer_email: currentUser?.email || '',
       subject: q.subject.trim(),
       category: q.category,
@@ -594,7 +593,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             ...q,
             status: 'answered',
             answer: answer.trim(),
-            answered_by: currentUser?.full_name ? `${currentUser.full_name} (${currentUser.role})` : 'Staff Member',
+            answered_by: currentUser?.full_name ? `${currentUser.full_name} (${currentUser.role})` : undefined,
             answered_at: new Date().toISOString(),
           };
         }
