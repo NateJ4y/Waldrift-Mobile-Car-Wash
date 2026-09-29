@@ -6,27 +6,42 @@ import { WaldriftLogo } from '../components/WaldriftLogo';
 import { User, Mail, Phone, Gift, ArrowRight } from 'lucide-react';
 
 export const RegisterPage: React.FC = () => {
-  const { registerUser, setCurrentPage } = useApp();
+  const { signUp, setCurrentPage } = useApp();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [referralCode, setReferralCode] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullName.trim() || !email.trim()) {
       setError('Please fill in your name and email address.');
       return;
     }
 
-    registerUser({
+    setError('');
+    setMessage('');
+    setLoading(true);
+    const result = await signUp({
       full_name: fullName,
       email,
       phone,
+      password,
       referral_code_used: referralCode.trim() || undefined,
     });
-
+    setLoading(false);
+    if (!result.success) {
+      setError(result.error || 'Unable to create your account.');
+      return;
+    }
+    if (result.needsEmailConfirmation) {
+      setMessage('Account created. Check your email to confirm your address, then sign in.');
+      return;
+    }
     setCurrentPage('customer-dashboard');
   };
 
@@ -42,6 +57,12 @@ export const RegisterPage: React.FC = () => {
             Register to track wash history, earn 4th free washes, and refer friends
           </p>
         </div>
+
+        {message && (
+          <div className="p-3 bg-emerald-950/70 border border-emerald-800 text-emerald-300 text-xs rounded-lg">
+            {message}
+          </div>
+        )}
 
         {error && (
           <div className="p-3 bg-red-950/70 border border-red-800 text-red-300 text-xs rounded-lg">
@@ -70,6 +91,16 @@ export const RegisterPage: React.FC = () => {
           />
 
           <Input
+            label="Password"
+            type="password"
+            placeholder="Create a password (min. 6 characters)"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            minLength={6}
+            required
+          />
+
+          <Input
             label="Phone / WhatsApp Number"
             placeholder="e.g. 082 555 1234"
             value={phone}
@@ -87,8 +118,8 @@ export const RegisterPage: React.FC = () => {
             helperText="Enter a friend's code to get R20 bonus credit on your account"
           />
 
-          <Button type="submit" variant="primary" size="md" className="w-full">
-            Create Account &amp; Open Garage &rarr;
+          <Button type="submit" variant="primary" size="md" className="w-full" disabled={loading}>
+            {loading ? 'Creating Account...' : 'Create Account &amp; Open Garage &rarr;'}
           </Button>
         </form>
 
