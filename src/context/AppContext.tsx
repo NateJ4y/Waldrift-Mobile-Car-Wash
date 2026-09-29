@@ -10,9 +10,11 @@ interface AppContextType {
   loginUser: (email: string) => boolean;
   registerUser: (userData: { full_name: string; email: string; phone: string; referral_code_used?: string }) => User;
   logout: () => void;
-  signIn: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  signIn: (email: string, password: string) => Promise<{ success: boolean; error?: string; role?: User['role'] }>;
   signUp: (userData: { full_name: string; email: string; phone: string; password: string; referral_code_used?: string }) => Promise<{ success: boolean; error?: string; needsEmailConfirmation?: boolean }>;
   signOut: () => Promise<void>;
+  listManageableProfiles: () => Promise<{ data?: unknown[]; error?: string }>;
+  assignUserRole: (email: string, role: User['role']) => Promise<{ success: boolean; error?: string }>;
 
   // Navigation
   currentPage: string;
@@ -153,9 +155,34 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     if (error) return { success: false, error: error.message };
-    return { success: true };
+    const user = data.user;
+    if (!user) return { success: false, error: 'Sign-in succeeded but no user session was returned.' };
+
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    if (profileError) return { success: false, error: profileError.message };
+
+    const metadata = user.user_metadata || {};
+    const role = (profile?.role || 'customer') as User['role'];
+    setCurrentUser({
+      id: user.id,
+      email: user.email || '',
+      full_name: profile?.full_name || metadata.full_name || '',
+      phone: profile?.phone || metadata.phone || '',
+      role,
+      created_at: profile?.created_at || user.created_at,
+      referral_code: profile?.referral_code,
+      referred_by: profile?.referred_by,
+      discount_balance: Number(profile?.discount_balance || 0),
+    } as User);
+
+    return { success: true, role };
   };
 
   const signUp = async (userData: { full_name: string; email: string; phone: string; password: string; referral_code_used?: string }) => {
@@ -178,6 +205,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     await supabase.auth.signOut();
     setCurrentUser(null);
     setCurrentPage('landing');
+  };
+
+  const listManageableProfiles = async () => {
+    const { data, error } = await supabase.rpc('list_manageable_profiles');
+    return { data: data || [], error: error?.message };
+  };
+
+  const assignUserRole = async (email: string, role: User['role']) => {
+    const { error } = await supabase.rpc('assign_user_role', {
+      target_email: email.trim(),
+      target_role: role,
+    });
+    return error ? { success: false, error: error.message } : { success: true };
   };
 
   // Navigation
@@ -694,6 +734,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         signIn,
         signUp,
         signOut,
+    listManageableProfiles,
+    assignUserRole,
         currentPage,
         setCurrentPage,
         pageParams,
