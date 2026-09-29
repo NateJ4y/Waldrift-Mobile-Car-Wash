@@ -234,7 +234,7 @@ export const StaffCheckInPage: React.FC = () => {
               <div className="space-y-4">
                 <Input
                   label="Number Plate (Lookup / Scan)"
-                  placeholder="e.g. DB 44 ZN GP"
+                  placeholder="e.g. ABC 123 GP"
                   value={plateInput}
                   onChange={(e) => setPlateInput(e.target.value.toUpperCase())}
                   required
