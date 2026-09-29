@@ -175,7 +175,7 @@ export const AdminDashboard: React.FC = () => {
           <div>
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-oswald font-700 text-xl uppercase tracking-wider text-white">
-                Recent Bay Dispatches
+                Recent Service Activity
               </h2>
               <button
                 onClick={() => setCurrentPage('plate-lookup')}
@@ -185,33 +185,39 @@ export const AdminDashboard: React.FC = () => {
               </button>
             </div>
 
-            <div className="space-y-3">
-              {visitRecords.slice(0, 4).map((rec) => (
-                <div
-                  key={rec.id}
-                  className="bg-neutral-950 p-3 rounded-xl border border-neutral-800 flex items-center justify-between text-xs"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="font-mono font-700 text-amber-400">
-                      {rec.plate_number}
-                    </span>
-                    <div>
-                      <span className="text-white font-600 block">{rec.vehicle_summary}</span>
-                      <span className="text-[10px] text-neutral-400">{rec.service_package_name}</span>
+            {visitRecords.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-neutral-700 bg-neutral-950 p-6 text-center">
+                <p className="text-sm font-700 text-white uppercase">No service activity recorded</p>
+                <p className="text-xs text-neutral-500 mt-1">
+                  Completed washes will appear here once staff record real check-ins.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {visitRecords.slice(0, 4).map((rec) => (
+                  <div
+                    key={rec.id}
+                    className="bg-neutral-950 p-3 rounded-xl border border-neutral-800 flex items-center justify-between text-xs"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="font-mono font-700 text-amber-400">{rec.plate_number}</span>
+                      <div>
+                        <span className="text-white font-600 block">{rec.vehicle_summary}</span>
+                        <span className="text-[10px] text-neutral-400">{rec.service_package_name}</span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="font-mono font-700 text-emerald-400 block">R{rec.amount_paid}</span>
+                      <span className="text-[10px] text-neutral-500">{rec.date}</span>
                     </div>
                   </div>
-
-                  <div className="text-right">
-                    <span className="font-mono font-700 text-emerald-400 block">R{rec.amount_paid}</span>
-                    <span className="text-[10px] text-neutral-500">{rec.date}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="pt-4 border-t border-neutral-800 flex justify-between items-center text-xs text-neutral-400">
-            <span>Operating Bay: 19 Andesite Ave &middot; Free 10km Callout Active</span>
+            <span>Live operational data will appear here as it is recorded.</span>
             <Button
               variant="outline"
               size="sm"
