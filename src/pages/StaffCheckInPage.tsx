@@ -487,7 +487,7 @@ export const StaffCheckInPage: React.FC = () => {
 
               <Input
                 label="Customer Phone (Optional)"
-                placeholder="e.g. 082 555 1234"
+                placeholder="e.g. 082 000 0000"
                 value={customerPhone}
                 onChange={(e) => setCustomerPhone(e.target.value)}
               />
