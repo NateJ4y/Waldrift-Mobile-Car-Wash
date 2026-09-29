@@ -456,7 +456,7 @@ export const CustomerDashboard: React.FC = () => {
         <form onSubmit={handleAddVehicleSubmit} className="space-y-4">
           <Input
             label="License Plate Number"
-            placeholder="e.g. DB 44 ZN GP"
+            placeholder="e.g. ABC 123 GP"
             value={newPlate}
             onChange={(e) => setNewPlate(e.target.value.toUpperCase())}
             required
