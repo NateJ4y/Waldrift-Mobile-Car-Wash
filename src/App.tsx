@@ -22,9 +22,13 @@ import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 
 const AppContent: React.FC = () => {
-  const { currentPage, payPalModalState, closePayPal } = useApp();
+  const { currentPage, payPalModalState, closePayPal, currentUser } = useApp();
 
   const renderCurrentPage = () => {
+    const protectedPages = new Set(['staff-checkin','plate-lookup','admin-dashboard','service-management','staff-management']);
+    if (protectedPages.has(currentPage) && !currentUser) return <LoginPage />;
+    if (['admin-dashboard','service-management','staff-management'].includes(currentPage) && currentUser?.role !== 'admin') return <LandingPage />;
+    if (['staff-checkin','plate-lookup'].includes(currentPage) && !['staff','admin'].includes(currentUser?.role || '')) return <LandingPage />;
     switch (currentPage) {
       case 'landing':
         return <LandingPage />;
