@@ -6,25 +6,22 @@ import { WaldriftLogo } from '../components/WaldriftLogo';
 import { Mail } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
-  const { loginUser, setCurrentPage } = useApp();
+  const { signIn, setCurrentPage } = useApp();
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    const success = loginUser(email);
-    if (success) {
+    setLoading(true);
+    const result = await signIn(email, password);
+    setLoading(false);
+    if (result.success) {
       setCurrentPage('customer-dashboard');
     } else {
-      setError('No account was found for that email. Please register or use an account created by Waldrift.');
-    }
-  };
-
-  const handleQuickLogin = (targetEmail: string, destinationPage: string) => {
-    const success = loginUser(targetEmail);
-    if (success) {
-      setCurrentPage(destinationPage);
+      setError(result.error || 'Unable to sign in. Please check your details and try again.');
     }
   };
 
@@ -60,8 +57,17 @@ export const LoginPage: React.FC = () => {
             icon={<Mail className="w-4 h-4" />}
           />
 
-          <Button type="submit" variant="primary" size="md" className="w-full">
-            Sign In with Email &rarr;
+          <Input
+            label="Password"
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <Button type="submit" variant="primary" size="md" className="w-full" disabled={loading}>
+            {loading ? 'Signing In...' : 'Sign In &rarr;'}
           </Button>
         </form>
 
