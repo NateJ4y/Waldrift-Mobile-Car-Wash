@@ -480,7 +480,7 @@ export const StaffCheckInPage: React.FC = () => {
 
               <Input
                 label="Customer Name (Optional)"
-                placeholder="e.g. Sipho Mthembu"
+                placeholder="e.g. Customer name"
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
               />
