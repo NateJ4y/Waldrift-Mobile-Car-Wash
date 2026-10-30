@@ -16,9 +16,9 @@ export const LandingPage: React.FC = () => {
   return (
     <div className="pb-16">
       <section className="relative overflow-hidden border-b border-neutral-800">
-        <div className="absolute inset-0">
-          <img src="/src/assets/images/hero_carwash_bay_1790713496421.jpg" alt="Vehicle being washed" className="h-full w-full object-cover opacity-25" />
-          <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/70 via-neutral-950/80 to-neutral-950" />
+        <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,rgba(220,38,38,0.22),transparent_55%),linear-gradient(135deg,#171717_0%,#090909_55%,#1c0b0b_100%)]">
+          <div className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,0.07)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.07)_1px,transparent_1px)] [background-size:48px_48px]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/30 via-neutral-950/45 to-neutral-950" />
         </div>
         <div className="relative mx-auto max-w-5xl px-5 py-20 text-center sm:py-28">
           <p className="mb-4 text-xs font-bold uppercase tracking-[0.22em] text-red-400">Waldrift Car Wash · Vereeniging</p>
