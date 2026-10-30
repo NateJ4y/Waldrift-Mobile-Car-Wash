@@ -158,7 +158,7 @@ export const BookAppointmentPage: React.FC = () => {
 
     const finalNotes = [
       notes,
-      serviceLocationType === 'callout' ? `[MOBILE CALLOUT TO: ${calloutAddress}]` : '[BAY DRIVE-IN: 19 Andesite Ave]',
+      serviceLocationType === 'callout' ? `[MOBILE CALLOUT TO: ${calloutAddress}]` : '[DRIVE-IN: WALDRIFT WASH LOCATION]',
     ]
       .filter(Boolean)
       .join(' ');
@@ -268,7 +268,7 @@ export const BookAppointmentPage: React.FC = () => {
             <div>
               <span className="text-neutral-500 block">Service Location</span>
               <span className="font-600 text-neutral-200">
-                {serviceLocationType === 'callout' ? `Callout: ${calloutAddress}` : '19 Andesite Ave, Waldrif'}
+                {serviceLocationType === 'callout' ? `Callout: ${calloutAddress}` : 'Waldrift wash location'}
               </span>
             </div>
             <div>
@@ -551,7 +551,7 @@ export const BookAppointmentPage: React.FC = () => {
                 Schedule &amp; Service Location
               </h2>
               <p className="text-xs text-neutral-400">
-                Book a bay time or request free mobile callout within 10km
+                Choose to visit our wash location or request a mobile wash
               </p>
             </div>
           </div>
@@ -571,7 +571,7 @@ export const BookAppointmentPage: React.FC = () => {
                 <span className="text-sm font-700 text-white uppercase">Drive-In to Wash Bay</span>
               </div>
               <p className="text-xs text-neutral-400 mt-1">
-                19 Andesite Ave, Waldrif, Vereeniging. Customer lounge &amp; high pressure foam bays.
+                Visit our Waldrift wash location. We’ll share directions when your booking is confirmed.
               </p>
             </div>
 
@@ -588,7 +588,7 @@ export const BookAppointmentPage: React.FC = () => {
                 <span className="text-sm font-700 text-white uppercase">Mobile Callout (We Come to You)</span>
               </div>
               <p className="text-xs text-neutral-400 mt-1">
-                FREE callout within a 10km radius in Vereeniging. We bring all water &amp; equipment!
+                We can come to your home or workplace. We’ll confirm availability and any travel fee before the booking.
               </p>
             </div>
           </div>
@@ -600,7 +600,7 @@ export const BookAppointmentPage: React.FC = () => {
               value={calloutAddress}
               onChange={(e) => setCalloutAddress(e.target.value)}
               required
-              helperText="Must be within 10km radius of Waldrift for free callout"
+              helperText="Enter the address where you would like the vehicle washed."
             />
           )}
 
@@ -671,14 +671,14 @@ export const BookAppointmentPage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Input
               label="Your Full Name"
-              placeholder="e.g. Sipho Mthembu"
+              placeholder="Your full name"
               value={customerName}
               onChange={(e) => setCustomerName(e.target.value)}
               required
             />
             <Input
               label="Cell Phone / WhatsApp"
-              placeholder="e.g. 082 555 1234"
+              placeholder="Your phone number"
               value={customerPhone}
               onChange={(e) => setCustomerPhone(e.target.value)}
               required
@@ -686,7 +686,7 @@ export const BookAppointmentPage: React.FC = () => {
             <Input
               label="Email Address"
               type="email"
-              placeholder="e.g. name@gmail.com"
+              placeholder="you@example.com"
               value={customerEmail}
               onChange={(e) => setCustomerEmail(e.target.value)}
               required
@@ -748,7 +748,7 @@ export const BookAppointmentPage: React.FC = () => {
                 Payment Option &amp; Confirmation
               </h2>
               <p className="text-xs text-neutral-400">
-                Choose between online PayPal pre-payment or pay on arrival
+                Payment is made when your wash is complete.
               </p>
             </div>
           </div>
@@ -769,33 +769,12 @@ export const BookAppointmentPage: React.FC = () => {
                   Pay on Arrival (Cash or Card)
                 </span>
                 <span className="text-xs text-neutral-400">
-                  Pay directly at the bay counter at 19 Andesite Ave after your car is clean.
+                  Pay when the wash is complete. Cash or card payment can be confirmed with the team.
                 </span>
               </div>
             </div>
 
-            <div
-              onClick={() => setPaymentChoice('paypal')}
-              className={`p-4 rounded-xl border cursor-pointer transition-all flex items-start gap-3 ${
-                paymentChoice === 'paypal'
-                  ? 'border-yellow-500 bg-yellow-950/20 ring-1 ring-yellow-500/60'
-                  : 'border-neutral-800 bg-neutral-950 hover:border-neutral-700'
-              }`}
-            >
-              <CreditCard className="w-5 h-5 text-[#0079c1] shrink-0 mt-0.5" />
-              <div>
-                <span className="text-sm font-700 text-white uppercase flex items-center gap-1.5">
-                  <span>PayPal Online Pre-payment</span>
-                  <span className="text-[10px] text-yellow-400 font-mono font-bold bg-yellow-950/60 px-1 rounded">
-                    Instant
-                  </span>
-                </span>
-                <span className="text-xs text-neutral-400">
-                  Pay with PayPal account, Visa, or Mastercard. Fast track check-in upon arrival.
-                </span>
-              </div>
-            </div>
-          </div>
+                      </div>
 
           {/* Order Summary Receipt Box */}
           <div className="bg-neutral-950 p-5 rounded-xl border border-neutral-800 space-y-2.5">
@@ -842,7 +821,7 @@ export const BookAppointmentPage: React.FC = () => {
                 Proceed to PayPal Checkout &bull; R{finalTotal}
               </span>
             ) : (
-              <span>Confirm Appointment (Pay R{finalTotal} on Arrival) &rarr;</span>
+              <span>Send Booking Request &rarr;</span>
             )}
           </Button>
         </div>
