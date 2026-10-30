@@ -499,7 +499,8 @@ export const CustomerDashboard: React.FC = () => {
               >
                 <option value="sedan">Sedan / Hatchback</option>
                 <option value="suv">SUV / Crossover</option>
-                <option value="bakkie">Bakkie / 4x4 / Minibus</option>
+                <option value="bakkie">Bakkie / 4x4</option>
+                 <option value="van">Van / Minibus</option>
               </select>
             </div>
           </div>
