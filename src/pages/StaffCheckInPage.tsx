@@ -92,6 +92,7 @@ export const StaffCheckInPage: React.FC = () => {
   let pkgPrice = selectedPkg?.price_sedan || 0;
   if (vehicleType === 'suv') pkgPrice = selectedPkg?.price_suv || 0;
   if (vehicleType === 'bakkie') pkgPrice = selectedPkg?.price_bakkie || 0;
+  if (vehicleType === 'van') pkgPrice = selectedPkg?.price_van || 0;
 
   const addonsTotal = selectedAddonIds.reduce((sum, id) => {
     const a = addons.find((item) => item.id === id);
@@ -307,6 +308,7 @@ export const StaffCheckInPage: React.FC = () => {
                       <option value="sedan">Sedan / Hatch</option>
                       <option value="suv">SUV / Crossover</option>
                       <option value="bakkie">Bakkie / 4x4</option>
+                       <option value="van">Van / Minibus</option>
                     </select>
                   </div>
                 </div>
@@ -369,6 +371,7 @@ export const StaffCheckInPage: React.FC = () => {
                 let price = pkg.price_sedan;
                 if (vehicleType === 'suv') price = pkg.price_suv;
                 if (vehicleType === 'bakkie') price = pkg.price_bakkie;
+                 if (vehicleType === 'van') price = pkg.price_van;
 
                 return (
                   <div
