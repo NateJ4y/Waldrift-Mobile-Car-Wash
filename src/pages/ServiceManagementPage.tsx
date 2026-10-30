@@ -104,7 +104,7 @@ export const ServiceManagementPage: React.FC = () => {
                 )}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <Input
                   label="Sedan Price (ZAR)"
                   type="number"
@@ -122,6 +122,12 @@ export const ServiceManagementPage: React.FC = () => {
                   type="number"
                   value={pkg.price_bakkie}
                   onChange={(e) => handlePackageChange(pkg.id, 'price_bakkie', Number(e.target.value))}
+                />
+                <Input
+                  label="Van / Minibus Price (ZAR)"
+                  type="number"
+                  value={pkg.price_van}
+                  onChange={(e) => handlePackageChange(pkg.id, 'price_van', Number(e.target.value))}
                 />
               </div>
             </div>
