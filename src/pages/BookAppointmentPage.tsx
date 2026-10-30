@@ -107,6 +107,7 @@ export const BookAppointmentPage: React.FC = () => {
   let pkgBasePrice = selectedPkg.price_sedan;
   if (vehicleType === 'suv') pkgBasePrice = selectedPkg.price_suv;
   if (vehicleType === 'bakkie') pkgBasePrice = selectedPkg.price_bakkie;
+  if (vehicleType === 'van') pkgBasePrice = selectedPkg.price_van;
 
   const addonsTotal = selectedAddonIds.reduce((sum, id) => {
     const item = addons.find((a) => a.id === id);
@@ -411,6 +412,7 @@ export const BookAppointmentPage: React.FC = () => {
                   <option value="sedan">Sedan / Hatchback</option>
                   <option value="suv">SUV / Crossover</option>
                   <option value="bakkie">Bakkie / 4x4</option>
+                  <option value="van">Van / Minibus</option>
                 </select>
               </div>
             </div>
@@ -440,6 +442,7 @@ export const BookAppointmentPage: React.FC = () => {
               let price = pkg.price_sedan;
               if (vehicleType === 'suv') price = pkg.price_suv;
               if (vehicleType === 'bakkie') price = pkg.price_bakkie;
+              if (vehicleType === 'van') price = pkg.price_van;
 
               return (
                 <div
