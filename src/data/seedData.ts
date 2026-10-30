@@ -1,144 +1,27 @@
-import { 
-  User, 
-  Vehicle, 
-  ServicePackage, 
-  AddonService, 
-  MembershipPlan, 
-  AppointmentBooking, 
-  VehicleVisitRecord, 
-  LoyaltyCardData,
-  ChatMessage, 
-  Question 
-} from '../types';
+import { ServicePackage, AddonService, MembershipPlan } from '../types';
 
 export const INITIAL_PACKAGES: ServicePackage[] = [
   {
-    id: 'pkg-wash-and-go',
-    name: 'WASH & GO',
-    tagline: 'Quick exterior rinse — in & out fast',
-    description: 'High-pressure pre-wash foam, micro-scrub rinse, and rapid air blast. Ideal for busy drivers in Vereeniging on the move.',
-    price_sedan: 40,
-    price_suv: 60,
-    price_bakkie: 80,
-    duration_minutes: 15,
-    counts_for_loyalty: false,
-    features: [
-      'High-pressure pre-rinse',
-      'Active cleaning shampoo wash',
-      'Wheel & rim blast rinse',
-      'Quick blower dry',
-    ],
-  },
-  {
-    id: 'pkg-wash-and-dry',
-    name: 'WASH & DRY',
-    tagline: 'Exterior wash + hand-dry finish',
-    description: 'Thorough exterior hand wash using scratch-free microfiber mitts followed by ultra-absorbent hand towel drying and door jamb wipe.',
-    price_sedan: 60,
-    price_suv: 80,
-    price_bakkie: 100,
-    duration_minutes: 25,
-    counts_for_loyalty: false,
-    features: [
-      'Complete high-pressure body wash',
-      'Hand micro-fiber scratchless scrub',
-      'Microfiber plush towel dry',
-      'Door jambs & boot seals wipe down',
-      'Wheel faces washed',
-    ],
-  },
-  {
     id: 'pkg-full-wash',
     name: 'FULL WASH',
-    tagline: 'Exterior wash, Interior vacuum, tyre shine & windows',
-    description: 'Our signature complete treatment. Exterior hand wash, intensive interior cabin vacuum, crystal clear streak-free windows, and glossy tyre dressing.',
+    tagline: 'A proper clean, inside and out',
+    description: 'A complete exterior wash and interior clean for everyday vehicles.',
     price_sedan: 80,
     price_suv: 100,
-    price_bakkie: 120,
+    price_bakkie: 100,
     duration_minutes: 45,
     is_popular: true,
     counts_for_loyalty: true,
     features: [
-      'Everything in Wash & Dry',
-      'Full cabin & boot vacuuming',
-      'Dashboard & console dust extraction',
-      'Crystal streak-free glass inside & out',
-      'Long-lasting glossy wet-look tyre shine',
-      '★ Counts toward your FREE 4th Full Wash',
+      'Exterior hand wash',
+      'Interior vacuum',
+      'Dashboard and interior wipe-down',
+      'Windows cleaned inside and out',
+      'Tyre shine',
     ],
   },
 ];
 
-export const INITIAL_ADDONS: AddonService[] = [
-  {
-    id: 'addon-engine-wash',
-    name: 'Engine Wash',
-    description: 'Add-on for any vehicle — degreased & rinsed clean with specialized engine-safe solvents.',
-    price: 70,
-    duration_minutes: 20,
-    icon: 'Flame',
-  },
-  {
-    id: 'addon-hand-wax',
-    name: 'Carnauba Hand Wax & Buff',
-    description: 'Deep carnauba wax seal providing hydrophobic water beading and 30-day UV paint protection.',
-    price: 80,
-    duration_minutes: 25,
-    icon: 'Sparkles',
-  },
-  {
-    id: 'addon-leather-condition',
-    name: 'Deep Leather Treatment',
-    description: 'pH-balanced leather shampooing and rich lanolin conditioning to prevent cracking and fading.',
-    price: 60,
-    duration_minutes: 20,
-    icon: 'ShieldCheck',
-  },
-  {
-    id: 'addon-headlight-restore',
-    name: 'Headlight Lens Clarity Restoration',
-    description: 'Micro-abrasive polishing to eliminate hazy yellow oxidation and restore headlight output.',
-    price: 120,
-    duration_minutes: 30,
-    icon: 'Sun',
-  },
-  {
-    id: 'addon-odour-neutralizer',
-    name: 'Antibacterial Mist & Odour Neutralizer',
-    description: 'Eliminates smoke, pet, and damp air conditioning smells with hospital-grade sanitization.',
-    price: 40,
-    duration_minutes: 10,
-    icon: 'Wind',
-  },
-];
+export const INITIAL_ADDONS: AddonService[] = [];
 
-export const INITIAL_MEMBERSHIPS: MembershipPlan[] = [
-  {
-    id: 'mem-wash-dry',
-    name: 'Monthly Wash & Dry Pass',
-    price_monthly: 350,
-    vehicle_type: 'all',
-    description: 'Unlimited weekly exterior washes to keep your car permanently spotless.',
-    perks: [
-      'Unlimited Wash & Dry visits (up to 2 per week)',
-      'Free priority lane access on weekends',
-      '10% off any detailing add-ons',
-      'Valid at 19 Andesite Ave & mobile callouts',
-    ],
-  },
-  {
-    id: 'mem-vip-care',
-    name: 'VIP Full Care Club',
-    price_monthly: 550,
-    vehicle_type: 'all',
-    description: 'Total car care with full washes, complimentary engine wash, and family discount.',
-    is_popular: true,
-    perks: [
-      '4 Full Washes per month included',
-      '1 FREE Engine Degrease & Wash monthly',
-      'Free mobile callout within 10km radius included',
-      'Priority booking queue during peak rush hours',
-      'Free Waldrift Loyalty Card stamps x2 on sign up',
-    ],
-  },
-];
+export const INITIAL_MEMBERSHIPS: MembershipPlan[] = [];
