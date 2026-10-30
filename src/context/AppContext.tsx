@@ -523,7 +523,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     let pkgCost = 0;
     if (data.vehicle_type === 'sedan') pkgCost = selectedPkg.price_sedan;
     else if (data.vehicle_type === 'suv') pkgCost = selectedPkg.price_suv;
-    else pkgCost = selectedPkg.price_bakkie;
+    else if (data.vehicle_type === 'bakkie') pkgCost = selectedPkg.price_bakkie;
+    else pkgCost = selectedPkg.price_van;
 
     const addonsCost = selectedAddons.reduce((acc, a) => acc + a.price, 0);
     let totalCost = pkgCost + addonsCost;
