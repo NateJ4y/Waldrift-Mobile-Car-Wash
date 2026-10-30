@@ -103,7 +103,7 @@ export const BookAppointmentPage: React.FC = () => {
   };
 
   // Current package and price calculations
-  const selectedPkg = packages.find((p) => p.id === selectedPackageId) || packages[2];
+  const selectedPkg = packages.find((p) => p.id === selectedPackageId) || packages[0];
   let pkgBasePrice = selectedPkg.price_sedan;
   if (vehicleType === 'suv') pkgBasePrice = selectedPkg.price_suv;
   if (vehicleType === 'bakkie') pkgBasePrice = selectedPkg.price_bakkie;
@@ -230,7 +230,7 @@ export const BookAppointmentPage: React.FC = () => {
             YOU&apos;RE READY FOR THE SHINE!
           </h1>
           <p className="text-sm text-neutral-300 mt-2 max-w-md mx-auto">
-            We have reserved your wash slot. Our team has received your vehicle details and license plate.
+            Your booking request has been recorded. Our team will confirm the details with you.
           </p>
         </div>
 
@@ -310,7 +310,7 @@ export const BookAppointmentPage: React.FC = () => {
           RESERVE YOUR CAR WASH
         </h1>
         <p className="text-sm text-neutral-400 max-w-xl mx-auto">
-          Book online in under 2 minutes. Choose to pay securely with PayPal or pay at our bay in cash/card.
+          Book online in under 2 minutes. Choose your vehicle, tell us where to wash it, and we’ll confirm your booking.
         </p>
       </div>
 
@@ -410,7 +410,7 @@ export const BookAppointmentPage: React.FC = () => {
                 >
                   <option value="sedan">Sedan / Hatchback</option>
                   <option value="suv">SUV / Crossover</option>
-                  <option value="bakkie">Bakkie / 4x4 / Minibus</option>
+                  <option value="bakkie">Bakkie / 4x4</option>
                 </select>
               </div>
             </div>
