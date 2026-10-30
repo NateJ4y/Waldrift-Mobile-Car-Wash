@@ -9,6 +9,7 @@ export const INITIAL_PACKAGES: ServicePackage[] = [
     price_sedan: 80,
     price_suv: 100,
     price_bakkie: 100,
+    price_van: 120,
     duration_minutes: 45,
     is_popular: true,
     counts_for_loyalty: true,
