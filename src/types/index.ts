@@ -1,6 +1,6 @@
 export type UserRole = 'customer' | 'staff' | 'admin';
 
-export type VehicleType = 'sedan' | 'suv' | 'bakkie';
+export type VehicleType = 'sedan' | 'suv' | 'bakkie' | 'van';
 
 export interface User {
   id: string;
@@ -39,6 +39,7 @@ export interface ServicePackage {
   price_sedan: number;
   price_suv: number;
   price_bakkie: number;
+  price_van: number;
   duration_minutes: number;
   is_popular?: boolean;
   counts_for_loyalty: boolean;
